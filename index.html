@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ujian CBT IPA Kelas 7 SMP/MTs</title>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-700: #334155;
+            --gray-900: #0f172a;
+            --bg-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--gray-100);
+            color: var(--gray-900);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Latar Belakang Tulisan Transparan Email */
+        .watermark-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-content: space-around;
+            opacity: 0.035;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--gray-900);
+            user-select: none;
+            transform: rotate(-15deg) scale(1.5);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 20px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            z-index: 1;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        /* Tampilan Form Awal */
+        #login-screen {
+            padding: 50px 40px;
+            text-align: center;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        #login-screen h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        #login-screen p {
+            color: var(--gray-700);
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--gray-700);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--gray-200);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s ease;
+            background: var(--gray-50);
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        /* Tampilan Ujian CBT */
+        #exam-screen {
+            display: none;
+            grid-template-columns: 1fr 320px;
+            height: 650px;
+        }
+
+        @media (max-width: 850px) {
+            #exam-screen {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+        }
+
+        .exam-main {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-right: 1px solid var(--gray-200);
+            overflow-y: auto;
+        }
+
+        .exam-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--gray-200);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .exam-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .timer {
+            background: #eef2ff;
+            color: var(--primary);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .question-box h4 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--gray-900);
+            line-height: 1.5;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border: 1px solid var(--gray-200);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: var(--gray-50);
+        }
+
+        .option-item:hover {
+            background: var(--gray-100);
+            border-color: var(--gray-700);
+        }
+
+        .option-item input {
+            margin-right: 12px;
+            accent-color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .option-item label {
+            cursor: pointer;
+            width: 100%;
+            font-size: 0.95rem;
+            color: var(--gray-700);
+        }
+
+        .exam-footer {
+            display: flex;
+            gap: 10px;
+            padding-top: 15px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .btn-nav {
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid var(--gray-200);
+            background: #fff;
+            color: var(--gray-700);
+            transition: all 0.2s;
+        }
+
+        .btn-nav:hover {
+            background: var(--gray-100);
+        }
+
+        .btn-doubt {
+            background: #fffbeb;
+            border-color: #fde68a;
+            color: #d97706;
+        }
+        .btn-doubt:hover {
+            background: #fef3c7;
+        }
+
+        .btn-next {
+            background: var(--primary);
+            color: white;
+            border: none;
+            margin-left: auto;
+        }
+        .btn-next:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Sidebar Navigasi Soal */
+        .exam-sidebar {
+            background: var(--gray-50);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--gray-900);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+            overflow-y: auto;
+            max-height: 280px;
+            padding-right: 4px;
+        }
+
+        .nav-item {
+            aspect-ratio: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: #fff;
+            border: 1px solid var(--gray-200);
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--gray-700);
+        }
+
+        .nav-item:hover {
+            border-color: var(--primary);
+        }
+
+        .nav-item.active {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+        }
+
+        .nav-item.answered {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .nav-item.doubt {
+            background: var(--warning);
+            color: white;
+            border-color: var(--warning);
+        }
+
+        .legend {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.75rem;
+            color: var(--gray-700);
+            border-top: 1px solid var(--gray-200);
+            padding-top: 15px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-box {
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+        }
+
+        .btn-submit-exam {
+            background: var(--success);
+            color: white;
+            margin-top: 15px;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-submit-exam:hover {
+            background: #059669;
+        }
+
+        /* Screen Selesai */
+        #result-screen {
+            display: none;
+            padding: 50px 30px;
+            text-align: center;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        #result-screen h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--gray-900);
+        }
+        #result-screen p {
+            color: var(--gray-700);
+            margin-bottom: 25px;
+        }
+        .score-card {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 25px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Latar Belakang Tulisan Transparan Email Pengguna -->
+    <div class="watermark-bg" id="watermark-container"></div>
+
+    <div class="container">
+        <!-- FORM AWAL -->
+        <div id="login-screen">
+            <h2>Ujian CBT IPA Kelas 7</h2>
+            <p>Silakan lengkapi data diri Anda sebelum memulai ujian.</p>
+            <form id="user-form" onsubmit="startExam(event)">
+                <div class="form-group">
+                    <label for="nama">Nama Lengkap</label>
+                    <input type="text" id="nama" placeholder="Contoh: Budi Santoso" required>
+                </div>
+                <div class="form-group">
+                    <label for="kelas">Kelas</label>
+                    <input type="text" id="kelas" placeholder="Contoh: VII A" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Contoh: budi@sekolah.sch.id" required>
+                </div>
+                <button type="submit" class="btn">Mulai Ujian Sekarang</button>
+            </form>
+        </div>
+
+        <!-- TAMPILAN UJIAN -->
+        <div id="exam-screen">
+            <div class="exam-main">
+                <div>
+                    <div class="exam-header">
+                        <h3 id="question-number-title">Soal No. 1</h3>
+                        <div class="timer" id="timer">45:00</div>
+                    </div>
+                    <div class="question-box">
+                        <h4 id="question-text">Pertanyaan soal IPA akan tampil di sini...</h4>
+                        <div class="options-list" id="options-container">
+                            <!-- Opsi Pilihan Ganda -->
+                        </div>
+                    </div>
+                </div>
+                <div class="exam-footer">
+                    <button class="btn-nav" onclick="prevQuestion()">Sebelumnya</button>
+                    <button class="btn-nav btn-doubt" onclick="toggleDoubt()">Ragu-ragu</button>
+                    <button class="btn-nav btn-next" onclick="nextQuestion()">Selanjutnya</button>
+                </div>
+            </div>
+
+            <!-- SIDEBAR NAVIGASI SOAL -->
+            <div class="exam-sidebar">
+                <div class="sidebar-title">Navigasi Soal</div>
+                <div class="nav-grid" id="nav-grid">
+                    <!-- Tombol Navigasi 1-20 dibentuk via JS -->
+                </div>
+                <div class="legend">
+                    <div class="legend-item"><div class="legend-box" style="background:#fff; border:1px solid #e2e8f0;"></div> Belum dijawab</div>
+                    <div class="legend-item"><div class="legend-box" style="background:var(--success)"></div> Sudah dijawab</div>
+                    <div class="legend-item"><div class="legend-box" style="background:var(--warning)"></div> Ragu-ragu</div>
+                </div>
+                <button class="btn-submit-exam" onclick="confirmSubmit()">Selesai Ujian</button>
+            </div>
+        </div>
+
+        <!-- TAMPILAN SELESAI -->
+        <div id="result-screen">
+            <h2>Ujian Selesai!</h2>
+            <p>Terima kasih telah menyelesaikan Ujian CBT IPA Kelas 7 SMP/MTs.</p>
+            <div class="score-card" id="score-display">Nilai Anda: 80</div>
+            <button class="btn" onclick="location.reload()">Keluar / Ulangi</button>
+        </div>
+    </div>
+
+    <script>
+        // Data Soal IPA Kelas 7 SMP/MTs (20 Nomor)
+        const questions = [
+            { q: "Besaran yang dapat diukur dan memiliki satuan disebut...", options: ["Besaran turunan", "Besaran pokok", "Besaran fisika", "Besaran satuan"], answer: 2 },
+            { q: "Berikut ini yang termasuk kelompok besaran pokok dalam Sistem Satuan Internasional (SI) adalah...", options: ["Panjang, massa, waktu", "Luas, volume, gaya", "Kecepatan, percepatan, gaya", "Suhu, kuat arus, tekanan"], answer: 0 },
+            { q: "Alat ukur yang memiliki tingkat ketelitian paling tinggi untuk mengukur diameter kelereng adalah...", options: ["Mistar", "Meteran", "Jangka sorong", "Mikrometer sekrup"], answer: 3 },
+            { q: "Wujud zat yang memiliki bentuk dan volume tetap adalah...", options: ["Padat", "Cair", "Gas", "Plasma"], answer: 0 },
+            { q: "Peristiwa perubahan wujud zat dari cair menjadi gas disebut...", options: ["Mencair", "Membeku", "Menguap", "Menyublim"], answer: 2 },
+            { q: "Massa jenis suatu zat padat dihitung dengan rumus...", options: ["m x v", "m / V", "V / m", "F / s"], answer: 1 },
+            { q: "Suhu zat menyatakan...", options: ["Jumlah kalor zat", "Derajat panas suatu benda", "Energi potensial benda", "Wujud suatu benda"], answer: 1 },
+            { q: "Titik tetap atas pada termometer Celcius bersuhu...", options: ["0 °C", "80 °C", "100 °C", "212 °C"], answer: 2 },
+            { q: "Segala sesuatu yang menempati ruang dan memiliki massa disebut...", options: ["Energi", "Gaya", "Materi", "Atom"], answer: 2 },
+            { q: "Pemisahan campuran antara air dan pasir dapat dilakukan dengan cara...", options: ["Distilasi", "Filtrasi", "Sublimasi", "Kromatografi"], answer: 1 },
+            { q: "Kertas lakmus merah jika dicelupkan ke dalam larutan asam akan berubah warna menjadi...", options: ["Biru", "Tetap merah", "Hijau", "Kuning"], answer: 1 },
+            { q: "Perubahan zat yang menghasilkan zat baru dan tidak dapat kembali ke bentuk semula disebut...", options: ["Perubahan fisika", "Perubahan kimia", "Perubahan wujud", "Perubahan bentuk"], answer: 1 },
+            { q: "Satuan gaya dalam Sistem Internasional (SI) adalah...", options: ["Joule", "Watt", "Newton", "Pascal"], answer: 2 },
+            { q: "Unit fungsional dan struktural terkecil dari makhluk hidup disebut...", options: ["Jaringan", "Organ", "Sel", "Sistem organ"], answer: 2 },
+            { q: "Bagian sel yang berfungsi mengatur seluruh kegiatan sel adalah...", options: ["Sitoplasma", "Membran sel", "Nukleus", "Mitokondria"], answer: 2 },
+            { q: "Jaringan pada tumbuhan yang berfungsi sebagai pengangkut air dan mineral dari akar ke daun adalah...", options: ["Floem", "Xilem", "Epidermis", "Kollenkim"], answer: 1 },
+            { q: "Kumpulan dari beberapa organ yang bekerja sama untuk melakukan fungsi tertentu disebut...", options: ["Jaringan", "Sistem organ", "Organisme", "Populasi"], answer: 1 },
+            { q: "Interaksi antara makhluk hidup yang saling menguntungkan disebut...", options: ["Komensalisme", "Parasitisme", "Mutualisme", "Predasi"], answer: 2 },
+            { q: "Komponen biotik dalam suatu ekosistem meliputi...", options: ["Tanah, air, udara", "Produsen, konsumen, pengurai", "Suhu, kelembapan, cahaya", "Batu, pasir, mineral"], answer: 1 },
+            { q: "Lapisan bumi yang berupa batuan padat dan membentuk kerak bumi serta bagian atas mantel disebut...", options: ["Atmosfer", "Litosfer", "Hidrosfer", "Biosfer"], answer: 1 }
+        ];
+
+        let currentQuestion = 0;
+        let userAnswers = new Array(questions.length).fill(null);
+        let userStatus = new Array(questions.length).fill("unanswered"); // 'unanswered', 'answered', 'doubt'
+        let timerInterval;
+        let timeLeft = 45 * 60; // 45 menit
+
+        function startExam(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+
+            // Generate Watermark teks transparan email di latar belakang
+            const watermarkContainer = document.getElementById('watermark-container');
+            let watermarkText = "";
+            for (let i = 0; i < 50; i++) {
+                watermarkText += `${email} &nbsp;&nbsp;&nbsp; `;
+            }
+            watermarkContainer.innerHTML = watermarkText;
+
+            // Sembunyikan form awal, tampilkan halaman ujian
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('exam-screen').style.display = 'grid';
+
+            initNavGrid();
+            loadQuestion(0);
+            startTimer();
+        }
+
+        function initNavGrid() {
+            const navGrid = document.getElementById('nav-grid');
+            navGrid.innerHTML = '';
+            questions.forEach((_, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'nav-item';
+                btn.id = `nav-item-${index}`;
+                btn.innerText = index + 1;
+                btn.onclick = () => goToQuestion(index);
+                navGrid.appendChild(btn);
+            });
+            updateNavGridUI();
+        }
+
+        function loadQuestion(index) {
+            currentQuestion = index;
+            document.getElementById('question-number-title').innerText = `Soal No. ${index + 1} dari ${questions.length}`;
+            document.getElementById('question-text').innerText = questions[index].q;
+
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            questions[index].options.forEach((opt, optIndex) => {
+                const isChecked = userAnswers[index] === optIndex ? 'checked' : '';
+                const optionDiv = document.createElement('div');
+                opti
